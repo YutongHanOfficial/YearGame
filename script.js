@@ -13,7 +13,20 @@ fetch("questions.json")
     .catch(error => console.error("Error loading questions:", error));
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("yearSlider").addEventListener("input", updateSliderValue);
+    const yearSlider = document.getElementById("yearSlider");
+    const yearInput = document.getElementById("yearInput");
+
+    yearSlider.addEventListener("input", () => {
+        yearInput.value = yearSlider.value;
+    });
+
+    yearInput.addEventListener("input", () => {
+        let value = parseInt(yearInput.value);
+        if (value < 1575) value = 1575;
+        if (value > 2025) value = 2025;
+        yearInput.value = value;
+        yearSlider.value = value;
+    });
 });
 
 function shuffleQuestions(arr) {
@@ -24,6 +37,7 @@ function loadQuestion() {
     if (health <= 0) {
         document.getElementById("event").innerText = "Game Over!";
         document.getElementById("yearSlider").style.display = "none";
+        document.getElementById("yearInput").style.display = "none";
         document.querySelector("button").style.display = "none";
         return;
     }
@@ -34,12 +48,8 @@ function loadQuestion() {
     document.getElementById("event").innerText = questions[currentQuestionIndex].event;
 }
 
-function updateSliderValue() {
-    document.getElementById("yearValue").innerText = document.getElementById("yearSlider").value;
-}
-
 function submitGuess() {
-    const guess = parseInt(document.getElementById("yearSlider").value);
+    const guess = parseInt(document.getElementById("yearInput").value);
     const correctYear = questions[currentQuestionIndex].year;
     const errorMargin = Math.abs(correctYear - guess);
 
