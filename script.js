@@ -3,7 +3,6 @@ let score = 0;
 let health = 100;
 let currentQuestionIndex = 0;
 
-// Load questions from JSON file
 fetch("questions.json")
     .then(response => response.json())
     .then(data => {
@@ -12,6 +11,13 @@ fetch("questions.json")
     .catch(error => console.error("Error loading questions:", error));
 
 document.addEventListener("DOMContentLoaded", () => {
+    const healthSlider = document.getElementById("startingHealth");
+    const healthDisplay = document.getElementById("healthDisplay");
+
+    healthSlider.addEventListener("input", () => {
+        healthDisplay.innerText = `Health: ${healthSlider.value}`;
+    });
+
     const yearSlider = document.getElementById("yearSlider");
     const yearInput = document.getElementById("yearInput");
 
@@ -20,25 +26,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     yearInput.addEventListener("input", () => {
-        let value = parseInt(yearInput.value);
-        if (value < 1575) value = 1575;
-        if (value > 2025) value = 2025;
+        let value = Math.min(2025, Math.max(1575, parseInt(yearInput.value)));
         yearInput.value = value;
         yearSlider.value = value;
     });
 });
 
 function startGame() {
-    let inputHealth = parseInt(document.getElementById("startingHealth").value);
-    if (isNaN(inputHealth) || inputHealth < 1 || inputHealth > 1000) {
-        inputHealth = 100; // Default to 100 if invalid input
-    }
-    health = inputHealth;
+    health = parseInt(document.getElementById("startingHealth").value);
     document.getElementById("health").innerText = health;
-
     document.getElementById("setup-screen").classList.add("hidden");
     document.getElementById("game-container").classList.remove("hidden");
-
     loadQuestion();
 }
 
@@ -49,13 +47,10 @@ function shuffleQuestions(arr) {
 function loadQuestion() {
     if (health <= 0) {
         document.getElementById("event").innerText = "Game Over!";
-        document.getElementById("yearSlider").style.display = "none";
-        document.getElementById("yearInput").style.display = "none";
-        document.querySelector("button").style.display = "none";
+        document.querySelector("button").innerText = "Restart";
+        document.querySelector("button").onclick = () => location.reload();
         return;
     }
-
-    if (questions.length === 0) return;
 
     currentQuestionIndex = Math.floor(Math.random() * questions.length);
     document.getElementById("event").innerText = questions[currentQuestionIndex].event;
@@ -66,22 +61,16 @@ function submitGuess() {
     const correctYear = questions[currentQuestionIndex].year;
     const errorMargin = Math.abs(correctYear - guess);
 
-    document.getElementById("feedback").innerHTML = `Correct Year: ${correctYear}<br>Margin of error: ${errorMargin} years`;
+    document.getElementById("feedback").innerText = `Correct Year: ${correctYear} | Error: ${errorMargin} years`;
 
     health -= errorMargin;
-    if (health < 0) health = 0;
+    health = Math.max(0, health);
     score += 1;
 
     document.getElementById("score").innerText = score;
     document.getElementById("health").innerText = health;
 
     document.getElementById("continueBtn").classList.remove("hidden");
-
-    if (health <= 0) {
-        document.getElementById("feedback").innerHTML += "<br>Game Over!";
-        document.getElementById("continueBtn").innerText = "Restart";
-        document.getElementById("continueBtn").onclick = () => location.reload();
-    }
 }
 
 function nextQuestion() {
