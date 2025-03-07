@@ -1,5 +1,4 @@
 [
-    // War and Conflicts
     { "event": "End of the U.S. Civil War.", "year": 1865 },
     { "event": "Start of World War I.", "year": 1914 },
     { "event": "End of World War I.", "year": 1918 },
@@ -12,7 +11,6 @@
     { "event": "Fall of Saigon, marking the end of the Vietnam War.", "year": 1975 },
     { "event": "9/11 terrorist attacks on the U.S.", "year": 2001 },
 
-    // Politics and Government
     { "event": "The U.S. Constitution is ratified.", "year": 1788 },
     { "event": "The 18th Amendment is passed, establishing Prohibition in the U.S.", "year": 1919 },
     { "event": "The 19th Amendment is passed, granting women the right to vote in the U.S.", "year": 1920 },
@@ -22,7 +20,6 @@
     { "event": "The Soviet Union dissolves.", "year": 1991 },
     { "event": "Brexit referendum leads to the U.K. leaving the EU.", "year": 2016 },
 
-    // Science and Space Exploration
     { "event": "Charles Darwin publishes 'On the Origin of Species'.", "year": 1859 },
     { "event": "Albert Einstein publishes his theory of special relativity.", "year": 1905 },
     { "event": "First nuclear bomb test (Trinity test) takes place.", "year": 1945 },
@@ -31,7 +28,6 @@
     { "event": "The Hubble Space Telescope is launched.", "year": 1990 },
     { "event": "First image of a black hole is released.", "year": 2019 },
 
-    // Pop Culture and Technology
     { "event": "Titanic sinks.", "year": 1912 },
     { "event": "The first motion picture is released.", "year": 1888 },
     { "event": "First television broadcast takes place.", "year": 1928 },
