@@ -47,11 +47,27 @@ function shuffleQuestions(arr) {
 function loadQuestion() {
     if (health <= 0) {
         document.getElementById("event").innerText = "Game Over!";
-        document.querySelector("button").innerText = "Restart";
-        document.querySelector("button").onclick = () => location.reload();
+        document.getElementById("question").innerText = "You ran out of health.";
+        
+        // Hide input elements and buttons
+        document.querySelector(".input-container").classList.add("hidden");
+        document.querySelector("button").classList.add("hidden");
+        document.getElementById("continueBtn").classList.add("hidden");
+
+        // Create a restart button
+        const restartButton = document.createElement("button");
+        restartButton.innerText = "Restart";
+        restartButton.onclick = () => location.reload();
+        restartButton.style.marginTop = "20px";
+
+        // Append restart button to game content
+        const gameContent = document.querySelector(".game-content");
+        gameContent.appendChild(restartButton);
+
         return;
     }
 
+    // Load new question if game is not over
     currentQuestionIndex = Math.floor(Math.random() * questions.length);
     document.getElementById("event").innerText = questions[currentQuestionIndex].event;
 }
