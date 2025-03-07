@@ -21,10 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const yearSlider = document.getElementById("yearSlider");
     const yearInput = document.getElementById("yearInput");
 
+    // Sync the range slider with the number input
     yearSlider.addEventListener("input", () => {
         yearInput.value = yearSlider.value;
     });
 
+    // Clamp the number input between 1575 and 2025
     yearInput.addEventListener("input", () => {
         let value = Math.min(2025, Math.max(1575, parseInt(yearInput.value)));
         yearInput.value = value;
@@ -45,69 +47,70 @@ function shuffleQuestions(arr) {
 }
 
 function loadQuestion() {
-    if (health <= 0) {
-        document.getElementById("event").innerText = "Game Over!";
-        document.getElementById("question").innerText = "You ran out of health.";
-        
-        // Hide input elements and buttons
-        document.querySelector(".input-container").classList.add("hidden");
-        document.querySelector("button").classList.add("hidden");
-        document.getElementById("continueBtn").classList.add("hidden");
+    // Only load a question if health is above 0
+    if (health <= 0) return;
 
-        // Create a restart button
-        const restartButton = document.createElement("button");
-        restartButton.innerText = "Restart";
-        restartButton.onclick = () => location.reload();
-        restartButton.style.marginTop = "20px";
-
-        // Append restart button to game content
-        const gameContent = document.querySelector(".game-content");
-        gameContent.appendChild(restartButton);
-
-        return;
-    }
-
-    // Load new question if game is not over
     currentQuestionIndex = Math.floor(Math.random() * questions.length);
     document.getElementById("event").innerText = questions[currentQuestionIndex].event;
 }
 
 function submitGuess() {
+    if (health <= 0) return; // Stop if game is already over
+
     const guess = parseInt(document.getElementById("yearInput").value);
     const correctYear = questions[currentQuestionIndex].year;
     const errorMargin = Math.abs(correctYear - guess);
 
-    document.getElementById("feedback").innerText = `Correct Year: ${correctYear} | Error: ${errorMargin} years`;
+    document.getElementById("feedback").innerText = 
+        `Correct Year: ${correctYear} | Error: ${errorMargin} years`;
 
-    health -= errorMargin;
-    health = Math.max(0, health);
-    score += 1;
+    health = Math.max(0, health - errorMargin);
+    score++;
 
     document.getElementById("score").innerText = score;
     document.getElementById("health").innerText = health;
 
+    // If health is zero, end the game immediately
     if (health <= 0) {
         endGame();
-        return; // Stop further execution
+        return;
     }
 
+    // Otherwise, allow continuing to the next question
     document.getElementById("continueBtn").classList.remove("hidden");
 }
 
-function endGame() {
-    document.getElementById("event").innerText = "Game Over!";
-    document.getElementById("question").innerText = "";
-    document.getElementById("feedback").innerText = "You ran out of health!";
-    document.getElementById("continueBtn").classList.add("hidden");
-
-    const restartButton = document.createElement("button");
-    restartButton.innerText = "Restart";
-    restartButton.onclick = () => location.reload();
-    document.querySelector(".game-content").appendChild(restartButton);
-}
-
 function nextQuestion() {
+    // If health is zero, do nothing
+    if (health <= 0) return;
+
     document.getElementById("feedback").innerText = "";
     document.getElementById("continueBtn").classList.add("hidden");
     loadQuestion();
+}
+
+/**
+ * endGame() is called as soon as health hits 0.
+ * It hides the slider, input, and buttons, and shows a Restart button.
+ */
+function endGame() {
+    // Show 'Game Over!' message
+    document.getElementById("event").innerText = "Game Over!";
+    document.getElementById("question").innerText = "You ran out of health!";
+    document.getElementById("feedback").innerText = "";
+
+    // Hide the slider, number input, and both buttons
+    document.getElementById("yearSlider").style.display = "none";
+    document.getElementById("yearInput").style.display = "none";
+    document.querySelector("button[onclick='submitGuess()']").style.display = "none";
+    document.getElementById("continueBtn").classList.add("hidden");
+
+    // Create a new Restart button
+    const restartBtn = document.createElement("button");
+    restartBtn.innerText = "Restart";
+    restartBtn.onclick = () => location.reload();
+    restartBtn.style.marginTop = "20px";
+
+    // Append it to the .game-content area
+    document.querySelector(".game-content").appendChild(restartBtn);
 }
