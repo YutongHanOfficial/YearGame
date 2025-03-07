@@ -55,7 +55,7 @@ function loadQuestion() {
 }
 
 function submitGuess() {
-    if (health <= 0) return; // Stop if game is already over
+    if (health <= 0) return; // Stop if the game is already over
 
     const guess = parseInt(document.getElementById("yearInput").value);
     const correctYear = questions[currentQuestionIndex].year;
@@ -64,28 +64,42 @@ function submitGuess() {
     document.getElementById("feedback").innerText = 
         `Correct Year: ${correctYear} | Error: ${errorMargin} years`;
 
+    // Calculate new health & score
     health = Math.max(0, health - errorMargin);
     score++;
 
+    // Update UI
     document.getElementById("score").innerText = score;
     document.getElementById("health").innerText = health;
 
-    // If health is zero, end the game immediately
+    // If health hits 0, end the game immediately
     if (health <= 0) {
         endGame();
         return;
     }
 
-    // Otherwise, allow continuing to the next question
+    // **Disable or hide the slider, input, and submit button** 
+    document.getElementById("yearSlider").disabled = true;
+    document.getElementById("yearInput").disabled = true;
+    document.querySelector("button[onclick='submitGuess()']").style.display = "none";
+
+    // Show the Continue button
     document.getElementById("continueBtn").classList.remove("hidden");
 }
 
 function nextQuestion() {
-    // If health is zero, do nothing
-    if (health <= 0) return;
+    if (health <= 0) return; // Do nothing if game is over
 
+    // Clear feedback and hide Continue button
     document.getElementById("feedback").innerText = "";
     document.getElementById("continueBtn").classList.add("hidden");
+
+    // **Re-enable or show the slider, input, and submit button** 
+    document.getElementById("yearSlider").disabled = false;
+    document.getElementById("yearInput").disabled = false;
+    document.querySelector("button[onclick='submitGuess()']").style.display = "inline-block";
+
+    // Load the next question
     loadQuestion();
 }
 
