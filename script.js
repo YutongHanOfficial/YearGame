@@ -8,7 +8,6 @@ fetch("questions.json")
     .then(response => response.json())
     .then(data => {
         questions = shuffleQuestions(data);
-        loadQuestion();
     })
     .catch(error => console.error("Error loading questions:", error));
 
@@ -28,6 +27,20 @@ document.addEventListener("DOMContentLoaded", () => {
         yearSlider.value = value;
     });
 });
+
+function startGame() {
+    let inputHealth = parseInt(document.getElementById("startingHealth").value);
+    if (isNaN(inputHealth) || inputHealth < 1 || inputHealth > 1000) {
+        inputHealth = 100; // Default to 100 if invalid input
+    }
+    health = inputHealth;
+    document.getElementById("health").innerText = health;
+
+    document.getElementById("setup-screen").classList.add("hidden");
+    document.getElementById("game-container").classList.remove("hidden");
+
+    loadQuestion();
+}
 
 function shuffleQuestions(arr) {
     return arr.sort(() => Math.random() - 0.5);
