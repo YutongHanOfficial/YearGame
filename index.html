@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Guessing Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="score-lives">
+            <span>Score: <span id="score">0</span></span>
+            <span>Lives: <span id="lives">5</span></span>
+        </div>
+        <p id="question">In what year did the following happen?:</p>
+        <h2 id="event">Loading...</h2>
+        
+        <div class="guess-container">
+            <input type="number" id="guess" placeholder="Enter year">
+            <button onclick="submitGuess()">Submit</button>
+        </div>
+
+        <p id="feedback"></p>
+        <button id="continueBtn" onclick="nextQuestion()" class="hidden">Continue</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
