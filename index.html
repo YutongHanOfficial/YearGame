@@ -8,18 +8,19 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="score-lives">
+        <div class="score-health">
             <span>Score: <span id="score">0</span></span>
-            <span>Lives: <span id="lives">5</span></span>
+            <span>Health: <span id="health">100</span></span>
         </div>
         <p id="question">In what year did the following happen?:</p>
         <h2 id="event">Loading...</h2>
-        
-        <div class="guess-container">
-            <input type="number" id="guess" placeholder="Enter year">
-            <button onclick="submitGuess()">Submit</button>
+
+        <div class="slider-container">
+            <input type="range" id="yearSlider" min="1800" max="2025" value="1900" class="slider">
+            <p>Year: <span id="yearValue">1900</span></p>
         </div>
 
+        <button onclick="submitGuess()">Submit</button>
         <p id="feedback"></p>
         <button id="continueBtn" onclick="nextQuestion()" class="hidden">Continue</button>
     </div>
