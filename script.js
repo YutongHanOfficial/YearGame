@@ -57,6 +57,10 @@ function loadQuestion() {
 }
 
 function submitGuess() {
+    if (health <= 0) {
+        return; // Prevents further interaction if health is already 0
+    }
+
     const guess = parseInt(document.getElementById("yearInput").value);
     const correctYear = questions[currentQuestionIndex].year;
     const errorMargin = Math.abs(correctYear - guess);
@@ -65,12 +69,21 @@ function submitGuess() {
 
     health -= errorMargin;
     health = Math.max(0, health);
-    score += 1;
+
+    if (health > 0) {
+        score += 1; // Only increase score if still alive
+        document.getElementById("continueBtn").classList.remove("hidden");
+    }
 
     document.getElementById("score").innerText = score;
     document.getElementById("health").innerText = health;
 
-    document.getElementById("continueBtn").classList.remove("hidden");
+    if (health <= 0) {
+        document.getElementById("event").innerText = "Game Over!";
+        document.querySelector("button").innerText = "Restart";
+        document.querySelector("button").onclick = () => location.reload();
+        document.getElementById("continueBtn").classList.add("hidden"); // Hide continue button
+    }
 }
 
 function nextQuestion() {
