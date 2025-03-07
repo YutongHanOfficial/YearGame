@@ -36,6 +36,12 @@ h2 {
     margin: 10px 0;
 }
 
+#yearInput {
+    width: 80px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
 button {
     background-color: #ffcc00;
     border: none;
