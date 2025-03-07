@@ -57,10 +57,6 @@ function loadQuestion() {
 }
 
 function submitGuess() {
-    if (health <= 0) {
-        return; // Prevents further interaction if health is already 0
-    }
-
     const guess = parseInt(document.getElementById("yearInput").value);
     const correctYear = questions[currentQuestionIndex].year;
     const errorMargin = Math.abs(correctYear - guess);
@@ -69,21 +65,29 @@ function submitGuess() {
 
     health -= errorMargin;
     health = Math.max(0, health);
-
-    if (health > 0) {
-        score += 1; // Only increase score if still alive
-        document.getElementById("continueBtn").classList.remove("hidden");
-    }
+    score += 1;
 
     document.getElementById("score").innerText = score;
     document.getElementById("health").innerText = health;
 
     if (health <= 0) {
-        document.getElementById("event").innerText = "Game Over!";
-        document.querySelector("button").innerText = "Restart";
-        document.querySelector("button").onclick = () => location.reload();
-        document.getElementById("continueBtn").classList.add("hidden"); // Hide continue button
+        endGame();
+        return; // Stop further execution
     }
+
+    document.getElementById("continueBtn").classList.remove("hidden");
+}
+
+function endGame() {
+    document.getElementById("event").innerText = "Game Over!";
+    document.getElementById("question").innerText = "";
+    document.getElementById("feedback").innerText = "You ran out of health!";
+    document.getElementById("continueBtn").classList.add("hidden");
+
+    const restartButton = document.createElement("button");
+    restartButton.innerText = "Restart";
+    restartButton.onclick = () => location.reload();
+    document.querySelector(".game-content").appendChild(restartButton);
 }
 
 function nextQuestion() {
