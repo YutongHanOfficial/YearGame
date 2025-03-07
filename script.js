@@ -1,24 +1,23 @@
-const questions = [
-    { event: "World population reaches 4 billion.", year: 1974 },
-    { event: "The 18th Amendment is passed, establishing Prohibition in the U.S.", year: 1919 },
-    { event: "First man lands on the Moon.", year: 1969 },
-    { event: "The Berlin Wall falls.", year: 1989 },
-    { event: "The first iPhone is released.", year: 2007 },
-    { event: "Titanic sinks.", year: 1912 },
-    { event: "End of World War II.", year: 1945 }
-];
-
+let questions = [];
 let score = 0;
 let health = 100;
 let currentQuestionIndex = 0;
 
+// Load questions from JSON file
+fetch("questions.json")
+    .then(response => response.json())
+    .then(data => {
+        questions = shuffleQuestions(data);
+        loadQuestion();
+    })
+    .catch(error => console.error("Error loading questions:", error));
+
 document.addEventListener("DOMContentLoaded", () => {
-    loadQuestion();
     document.getElementById("yearSlider").addEventListener("input", updateSliderValue);
 });
 
-function shuffleQuestions() {
-    return questions.sort(() => Math.random() - 0.5);
+function shuffleQuestions(arr) {
+    return arr.sort(() => Math.random() - 0.5);
 }
 
 function loadQuestion() {
@@ -28,6 +27,8 @@ function loadQuestion() {
         document.querySelector("button").style.display = "none";
         return;
     }
+
+    if (questions.length === 0) return;
 
     currentQuestionIndex = Math.floor(Math.random() * questions.length);
     document.getElementById("event").innerText = questions[currentQuestionIndex].event;
